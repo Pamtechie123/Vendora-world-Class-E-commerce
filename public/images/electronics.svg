@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <rect width="800" height="800" rx="40" fill="#0F172A"/>
+  <rect x="180" y="180" width="440" height="440" rx="36" fill="#111827" stroke="#38BDF8" stroke-width="10"/>
+  <rect x="240" y="280" width="320" height="180" rx="28" fill="#F8FAFC"/>
+  <rect x="280" y="330" width="120" height="80" rx="18" fill="#38BDF8"/>
+  <rect x="420" y="330" width="100" height="80" rx="18" fill="#94A3B8"/>
+  <circle cx="260" cy="530" r="44" fill="#38BDF8"/>
+  <circle cx="540" cy="530" r="44" fill="#22C55E"/>
+  <text x="400" y="690" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="700" fill="#F8FAFC">Electronics</text>
+</svg>

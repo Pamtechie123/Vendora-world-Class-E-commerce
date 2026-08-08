@@ -33,26 +33,31 @@ const productImageKeywords = [
   "backpack",
   "coffee",
   "office chair",
-  "skincare",
+  "skincare product",
   "bluetooth speaker",
-  "cookware",
+  "cast iron cookware",
   "running shoes",
   "action camera",
   "desk organizer",
-  "blanket",
-  "water bottle",
+  "weighted blanket",
+  "stainless steel water bottle",
   "building blocks toy",
-  "wireless charger",
+  "wireless charging pad",
   "summer dress",
-  "dumbbell",
-  "essential oil diffuser",
+  "adjustable dumbbells",
+  "aromatherapy diffuser",
   "gaming keyboard",
   "air fryer",
-  "sunglasses",
-  "pillow",
-  "camera tripod",
-  "pet grooming",
+  "polarized sunglasses",
+  "memory foam pillow",
+  "travel tripod",
+  "pet grooming kit",
 ];
+
+const productImages = productImageKeywords.map((keyword, index) =>
+  `https://loremflickr.com/900/900/${encodeURIComponent(keyword)}?lock=${index + 1}`
+);
+
 export const categories: Category[] = [
   { id: "electronics", name: "Electronics", icon: "Smartphone", itemCount: 12480, colorFrom: "#2563EB", colorTo: "#1E3A8A" },
   { id: "fashion", name: "Fashion", icon: "Shirt", itemCount: 34210, colorFrom: "#F97316", colorTo: "#C2410C" },
@@ -93,43 +98,6 @@ const productNames = [
   "Pet Grooming Kit",
 ];
 
-function createProductSvg(label: string, color: string) {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900">
-      <defs>
-        <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="${color}" />
-          <stop offset="100%" stop-color="#111827" />
-        </linearGradient>
-      </defs>
-      <rect width="900" height="900" fill="url(#grad)" />
-      <rect x="60" y="60" width="780" height="780" rx="40" fill="rgba(255,255,255,0.08)" />
-      <text x="450" y="420" text-anchor="middle" font-family="Inter, sans-serif" font-size="48" fill="#ffffff" font-weight="700">
-        ${label.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}
-      </text>
-      <text x="450" y="520" text-anchor="middle" font-family="Inter, sans-serif" font-size="26" fill="#E5E7EB" opacity="0.9">
-        Product preview
-      </text>
-    </svg>
-  `;
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-}
-
-const PRODUCT_IMAGE_COLORS = [
-  "#2563EB",
-  "#10B981",
-  "#F97316",
-  "#8B5CF6",
-  "#0EA5E9",
-  "#F59E0B",
-  "#14B8A6",
-  "#6366F1",
-];
-
-const productImages = productNames.map((name, index) =>
-  createProductSvg(name, PRODUCT_IMAGE_COLORS[index % PRODUCT_IMAGE_COLORS.length])
-);
-
 const storeNames = [
   "NovaTech", "Northwind Goods", "Everline Home", "PureLeaf Beauty", "SprintGear",
   "UrbanCraft", "BrightNest", "TrailBlaze Outdoors", "Loomstate Apparel", "Kindled Kitchen",
@@ -163,7 +131,8 @@ export const products: Product[] = productNames.map((name, i) => {
     badge: i % 5 === 0 ? undefined : badges[i % badges.length],
     colorFrom: from,
     colorTo: to,
-    imageUrl: productImages[i % productImages.length],
+    imageUrl: productImages[i],
+    imageKeyword: productImageKeywords[i],
     storeName: storeNames[i % storeNames.length],
     freeShipping: i % 2 === 0,
     stock: 5 + ((i * 7) % 40),
@@ -177,10 +146,9 @@ export const products: Product[] = productNames.map((name, i) => {
       { label: "Warranty", value: i % 2 === 0 ? "12 months" : "6 months" },
       { label: "Origin", value: i % 3 === 0 ? "Imported" : "Locally sourced" },
     ],
-   
+
     colorOptions: CATEGORY_COLORS[category],
     sizeOptions: CATEGORY_SIZES[category],
-    imageKeyword: productImageKeywords[i],
   };
 });
 

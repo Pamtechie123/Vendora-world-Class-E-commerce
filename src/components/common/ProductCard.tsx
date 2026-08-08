@@ -50,6 +50,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <ProductImage
           colorFrom={product.colorFrom}
           colorTo={product.colorTo}
+          imageUrl={product.imageUrl}
           label={product.name}
           keyword={product.imageKeyword ?? product.category}
           seed={product.id}

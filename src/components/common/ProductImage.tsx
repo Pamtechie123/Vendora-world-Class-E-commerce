@@ -5,6 +5,7 @@ interface ProductImageProps {
   colorFrom: string;
   colorTo: string;
   label?: string;
+  imageUrl?: string;
   keyword?: string;
   seed?: string | number;
   className?: string;
@@ -34,6 +35,7 @@ export default function ProductImage({
   colorFrom,
   colorTo,
   label,
+  imageUrl,
   keyword,
   seed,
   className = "",
@@ -43,9 +45,12 @@ export default function ProductImage({
 
   const query = keyword ? keyword.trim().split(/\s+/).join(",") : "";
   const lock = hashSeed(seed ?? label ?? "vendora");
-  const src = query ? `https://loremflickr.com/600/600/${encodeURIComponent(query)}?lock=${lock}` : undefined;
+  const source = imageUrl?.trim();
+  const computedSrc =
+    source ||
+    (query ? `https://loremflickr.com/600/600/${encodeURIComponent(query)}?lock=${lock}` : undefined);
 
-  if (!src || failed) {
+  if (!computedSrc || failed) {
     return (
       <div
         className={`relative flex items-center justify-center overflow-hidden ${className}`}
@@ -62,7 +67,7 @@ export default function ProductImage({
 
   return (
     <img
-      src={src}
+      src={computedSrc}
       alt={label ?? "Product image"}
       loading="lazy"
       onError={() => setFailed(true)}

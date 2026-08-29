@@ -11,6 +11,7 @@ export interface Product {
   colorFrom: string;
   colorTo: string;
   imageUrl?: string;
+  imageKeyword?: string;
   storeName: string;
   freeShipping?: boolean;
   stock?: number;
@@ -18,7 +19,7 @@ export interface Product {
   specs?: { label: string; value: string }[];
   colorOptions?: string[];
   sizeOptions?: string[];
-  imageKeyword?: string;
+  image?: string;
 }
 
 

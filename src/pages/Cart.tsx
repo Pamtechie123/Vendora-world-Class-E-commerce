@@ -3,12 +3,14 @@ import { Trash2, ShoppingBag, ShieldCheck, ArrowRight } from "lucide-react";
 import ProductImage from "../components/common/ProductImage";
 import QuantityStepper from "../components/common/QuantityStepper";
 import { useCart } from "../context/CartContext";
+import { useCurrency } from "../context/CurrencyContext";
 
 const FREE_SHIPPING_THRESHOLD = 100;
 const SHIPPING_FEE = 6.99;
 
 export default function Cart() {
   const { items, updateQuantity, removeFromCart, subtotal } = useCart();
+  const { formatPrice } = useCurrency();
 
   if (items.length === 0) {
     return (
@@ -43,7 +45,7 @@ export default function Cart() {
 
       {amountToFreeShipping > 0 && (
         <div className="mt-4 rounded-xl bg-secondary/10 px-4 py-3 text-sm font-medium text-secondary">
-          Add ${amountToFreeShipping.toFixed(2)} more to unlock free shipping
+          Add {formatPrice(amountToFreeShipping)} more to unlock free shipping
         </div>
       )}
 
@@ -74,7 +76,7 @@ export default function Cart() {
                   >
                     {product.name}
                   </Link>
-                  <p className="mt-1 text-sm font-bold text-ink">${product.price.toFixed(2)}</p>
+                  <p className="mt-1 text-sm font-bold text-ink">{formatPrice(product.price)}</p>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -95,7 +97,7 @@ export default function Cart() {
               </div>
 
               <p className="hidden shrink-0 self-center text-right text-sm font-extrabold text-ink sm:block">
-                ${(product.price * quantity).toFixed(2)}
+                {formatPrice(product.price * quantity)}
               </p>
             </div>
           ))}
@@ -108,17 +110,17 @@ export default function Cart() {
             <div className="mt-5 space-y-3 text-sm">
               <div className="flex justify-between text-ink-muted">
                 <span>Subtotal</span>
-                <span className="font-medium text-ink">${subtotal.toFixed(2)}</span>
+                <span className="font-medium text-ink">{formatPrice(subtotal)}</span>
               </div>
               <div className="flex justify-between text-ink-muted">
                 <span>Shipping</span>
                 <span className="font-medium text-ink">
-                  {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                  {shipping === 0 ? "Free" : formatPrice(shipping)}
                 </span>
               </div>
               <div className="flex justify-between border-t border-border pt-3 text-base font-extrabold text-ink">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{formatPrice(total)}</span>
               </div>
             </div>
 

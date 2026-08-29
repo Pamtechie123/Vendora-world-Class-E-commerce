@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   Heart,
@@ -24,6 +24,7 @@ import {
 } from "../data/mockData";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import { useCurrency } from "../context/CurrencyContext";
 
 type Tab = "description" | "specs" | "reviews" | "qa";
 
@@ -34,11 +35,13 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState<string | undefined>();
   const [selectedSize, setSelectedSize] = useState<string | undefined>();
+  const [activeImage, setActiveImage] = useState(0);
   const [activeTab, setActiveTab] = useState<Tab>("description");
   const [added, setAdded] = useState(false);
 
   const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
+  const { formatPrice, currency, setCurrency, currencyOptions } = useCurrency();
 
   if (!product) {
     return (
@@ -72,6 +75,18 @@ export default function ProductDetail() {
     { id: "qa", label: "Q&A" },
   ];
 
+  const galleryImages = useMemo(() => {
+    const base = product.imageUrl || product.image || "";
+    const views = [
+      base,
+      product.imageUrl || base,
+      `https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80`,
+      `https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80`,
+    ].filter(Boolean);
+
+    return views.slice(0, 4);
+  }, [product]);
+
   return (
     <div className="container-page py-8 sm:py-10">
       {/* Breadcrumb */}
@@ -88,27 +103,31 @@ export default function ProductDetail() {
       <div className="grid gap-10 lg:grid-cols-2">
         {/* Gallery */}
         <div>
-          <div className="aspect-square w-full overflow-hidden rounded-2xl">
+          <div className="aspect-square w-full overflow-hidden rounded-2xl border border-border bg-surface">
             <ProductImage
               colorFrom={product.colorFrom}
               colorTo={product.colorTo}
-              imageUrl={product.imageUrl}
               label={product.name}
+              src={galleryImages[activeImage]}
               className="h-full w-full"
               iconSize={56}
             />
           </div>
           <div className="mt-3 grid grid-cols-4 gap-3">
-            {Array.from({ length: 4 }).map((_, i) => (
+            {galleryImages.map((image, i) => (
               <button
-                key={i}
-                className="aspect-square overflow-hidden rounded-xl border-2 border-transparent transition-colors hover:border-primary"
+                key={`${product.id}-gallery-${i}`}
+                type="button"
+                onClick={() => setActiveImage(i)}
+                className={`aspect-square overflow-hidden rounded-xl border-2 transition-all ${
+                  activeImage === i ? "border-primary shadow-sm" : "border-transparent hover:border-primary/50"
+                }`}
               >
                 <ProductImage
                   colorFrom={product.colorFrom}
                   colorTo={product.colorTo}
-                  imageUrl={product.imageUrl}
                   label={`${product.name} view ${i + 1}`}
+                  src={image}
                   className="h-full w-full"
                   iconSize={18}
                 />
@@ -138,18 +157,32 @@ export default function ProductDetail() {
 
           <div className="mt-5 flex items-baseline gap-3">
             <span className="text-3xl font-extrabold text-ink">
-              ${product.price.toFixed(2)}
+              {formatPrice(product.price)}
             </span>
             {product.originalPrice && (
               <>
                 <span className="text-lg text-ink-faint line-through">
-                  ${product.originalPrice.toFixed(2)}
+                  {formatPrice(product.originalPrice)}
                 </span>
                 <span className="rounded-full bg-accent-50 px-2.5 py-1 text-xs font-bold text-accent">
                   -{discount}%
                 </span>
               </>
             )}
+          </div>
+
+          <div className="mt-4 flex items-center gap-2 rounded-xl border border-border bg-surface p-2.5">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-faint">Currency</span>
+            <select
+              aria-label="Select display currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value as typeof currency)}
+              className="rounded-lg border border-border bg-white px-3 py-2 text-sm font-medium text-ink outline-none focus:border-primary"
+            >
+              {currencyOptions.map((option) => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
           </div>
 
           {product.colorOptions && (

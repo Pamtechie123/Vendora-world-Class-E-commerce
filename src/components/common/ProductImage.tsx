@@ -6,6 +6,7 @@ interface ProductImageProps {
   colorTo: string;
   label?: string;
   imageUrl?: string;
+  src?: string;
   keyword?: string;
   seed?: string | number;
   className?: string;
@@ -29,6 +30,7 @@ export default function ProductImage({
   colorTo,
   label,
   imageUrl,
+  src,
   keyword,
   seed,
   className = "",
@@ -42,7 +44,7 @@ export default function ProductImage({
 
   const lock = hashSeed(seed ?? label ?? "vendora");
 
-  const source = imageUrl?.trim();
+  const source = src?.trim() || imageUrl?.trim();
 
   const computedSrc =
     source ||

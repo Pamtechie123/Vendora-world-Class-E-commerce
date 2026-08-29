@@ -6,6 +6,7 @@ import ProductImage from "./ProductImage";
 import StarRating from "./StarRating";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
+import { useCurrency } from "../../context/CurrencyContext";
 
 interface ProductCardProps {
   product: Product;
@@ -22,6 +23,7 @@ const badgeStyles: Record<NonNullable<Product["badge"]>, string> = {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addToCart, items } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
+  const { formatPrice } = useCurrency();
 
   const inCart = items.some((i) => i.product.id === product.id);
   const wishlisted = isWishlisted(product.id);
@@ -109,11 +111,11 @@ export default function ProductCard({ product }: ProductCardProps) {
         <StarRating rating={product.rating} reviewCount={product.reviewCount} size={12} />
         <div className="mt-auto flex items-baseline gap-2 pt-1">
           <span className="text-base font-extrabold text-ink">
-            ${product.price.toFixed(2)}
+            {formatPrice(product.price)}
           </span>
           {product.originalPrice && (
             <span className="text-xs text-ink-faint line-through">
-              ${product.originalPrice.toFixed(2)}
+              {formatPrice(product.originalPrice)}
             </span>
           )}
         </div>

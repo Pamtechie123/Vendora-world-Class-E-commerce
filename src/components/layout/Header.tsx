@@ -14,6 +14,7 @@ import {
 import Logo from "../common/Logo";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
+import { useCurrency } from "../../context/CurrencyContext";
 
 const NAV_LINKS = [
   { label: "Categories", href: "/products" },
@@ -29,6 +30,7 @@ export default function Header() {
   const navigate = useNavigate();
   const { itemCount } = useCart();
   const { count: wishlistCount } = useWishlist();
+  const { currency, setCurrency, currencyOptions } = useCurrency();
 
   function handleSearch(e: FormEvent) {
     e.preventDefault();
@@ -51,9 +53,18 @@ export default function Header() {
             <button className="flex items-center gap-1 hover:text-white">
               English <ChevronDown size={12} />
             </button>
-            <button className="flex items-center gap-1 hover:text-white">
-              USD <ChevronDown size={12} />
-            </button>
+            <select
+              aria-label="Select currency"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value as typeof currency)}
+              className="rounded bg-transparent px-1 py-0.5 text-xs font-medium text-white outline-none ring-0"
+            >
+              {currencyOptions.map((option) => (
+                <option key={option} value={option} className="text-ink">
+                  {option}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
